@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to GTA Applications</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"> <!-- Google Font -->
+    <style>
+        body {
+            background: #e8f5e9; /* Gradient background */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+        }
+        .login-wrapper {
+            max-width: 900px; /* Adjusted width for better alignment */
+            width: 100%;
+            padding: 40px; /* Increased padding for spaciousness */
+            box-shadow: 0 4px 20px rgba(250, 248, 248, 0.3); /* Slightly darker shadow */
+            background-color: white; /* White background */
+            border-radius: 15px; /* Rounded corners */
+            text-align: center ; /* Left align text */
+            margin: 20px; /* Margin to space out from edges */
+        }
+        .space-logo {
+            margin-bottom: 30px; /* Increased space below the logo */
+            width: 350px; /* Adjust logo size */
+            height: auto;
+        }
+        .font-bold {
+            font-weight: bold;
+        }
+        h2 {
+            margin-bottom: 20px; /* Space below the heading */
+            font-size: 45px; /* Larger font for the title */
+            font-family: 'Helvetica Neue', sans-serif; 
+            color: #3d3d3d; /* Darker text color */
+            text-align: center; /* Center the title */
+        }
+        .form-group {
+            margin-bottom: 20px; /* More space between form groups */
+            text-align: left;
+        }
+        /* Styling for the placeholder text inside the email input */
+#email::placeholder {
+    color: #888; /* Set the color of the placeholder text */
+    font-size: 1.4rem; /* Set the font size of the placeholder text */
+    font-style: bold; /* Optional: Make the placeholder text italic */
+}
+
+
+/* Styling for the placeholder text inside the password input */
+#password::placeholder {
+    color: #888; /* Set the color of the placeholder text */
+    font-size: 1.4rem; /* Set the font size of the placeholder text */
+    font-style: bold; /* Optional: Make the placeholder text italic */
+}
+/* Apply font size for the email input */
+#email {
+    font-size: 1.4rem;
+}
+
+/* Apply font size for the password input */
+#password {
+    font-size: 1.4rem;
+}
+
+        .btn-custom {
+            background-color: #28a745; /* Green color for button */
+            color: white;
+            font-size: 20px; 
+            border-radius: 5px;
+            width: 100%;
+            padding: 10px;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+
+        label {
+            font-size: 25px;  /* Increased font size for labels */
+            font-weight: bold; /* Make the label text bold */
+        }
+        
+        .btn-custom:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+        .about-btn {
+            margin-top: 20px;
+            background-color: #0866ff;
+            font-size: 20px; 
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s; /* Smooth transition for hover effect */
+        }
+        .about-btn:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .text-center a {
+            font-size: 23px;  /* Increase font size */
+            font-weight: bold; /* Make the text bold */
+            color: #0866ff;   /* Blue color for the links */
+        }
+ 
+        .text-center a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+        .spacing {
+            margin-top: 20px; /* Added spacing below the login button */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <a href="/" class="logo" aria-label="Kennesaw State University Home">
+            <img src="https://webstatic.kennesaw.edu/_resources/images/template/ksu_horizontal.svg" alt="KSU Logo" class="space-logo">
+        </a>
+        <h2>Welcome Back</h2>
+        <!-- Flash messages for feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+        <!-- Login Form -->
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email" class="font-bold"></label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="font-bold"></label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-custom">Login</button>
+            <div class="spacing"></div> <!-- Added spacing div -->
+        </form>        
+        <div class="text-center">
+            <a href="{{ url_for('forgot_password') }}">Forgot Password</a> |
+            <a href="{{ url_for('create_account') }}">Create Account</a>
+        </div>
+        <!-- About Button -->
+        <div class="about-btn" id="aboutBtn">About this App</div>
+    </div>
+
+    <!-- Modal for About Info -->
+    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aboutModalLabel">About GTA App</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>The GTA Management System is designed to help users manage their GTA-related tasks efficiently. It provides an intuitive dashboard for managing course data, requests, and hiring-related activities.</p>
+                    <p>This app streamlines administrative tasks and improves productivity for all users.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('aboutBtn').addEventListener('click', function() {
+            $('#aboutModal').modal('show');
+        });
+    </script>
+</body>
+</html>

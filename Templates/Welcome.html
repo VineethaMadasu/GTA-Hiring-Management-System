@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Welcome</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Ensures full viewport height for the body */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e8f5e9;  /* Subtle background color */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
+        .navbar-custom {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px; /* Set fixed height for the navbar */
+            z-index: 1000;
+            background-color:#1a292c;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .logo img {
+            width: 500px; /* Adjust the width as needed */
+            height: auto; /* Maintains the aspect ratio */
+        }
+        
+        .navbar-custom h2 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        
+        .navbar-custom .logout-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 70px); /* Full viewport height minus navbar height */
+            width: 100%; /* Occupy full width */
+            padding: 20px;
+            text-align: center;
+            padding-top: 200px;
+            padding-bottom: 250px;
+        }
+
+        .welcome-box {
+            background-color: #ffffff;
+            padding: 40px;
+            max-width: 800px;
+            font-size: 1.5rem;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+        
+        .welcome-box img {
+            width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .content h1 {
+            font-size: 2.4rem;
+            font-weight: bold;
+            color: #00695c;
+            margin-bottom: 20px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        .content p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        
+        .home-link, .logout-link {
+    background-color: #1a292c; /* Same as navbar background */
+    color: white;
+    font-size: 1rem;
+    text-decoration: none; /* Removes underline */
+    text-align: center;
+    line-height: 1.5;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px; /* Adjust padding as needed */
+    margin: 10px; /* Spacing around buttons */
+    border-radius: 25px; /* Adds curvature to the buttons */
+}
+
+.home-link:hover, .logout-link:hover {
+    background-color: #388e3c;
+    color: #fff;
+}
+
+        .home-container {
+            margin-right: 5px;
+            display: flex;
+            font-weight: normal; /* Ensure text is not bold */
+            justify-content: flex-end; /* Aligns the Home link to the right */
+        }
+          
+        .logout-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .dropdowns-container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 40px;
+        }
+        
+        .move-here-box {
+            text-align: center;
+            background-color: #81c784;  /* Green card color */
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        
+        .move-here-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .move-here-box img {
+            width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        
+        .dropdown-toggle {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .dropdown-container {
+            display: none;
+            background-color: #00695c;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+        }
+        
+        .dropdown-container a {
+            font-size: 1.2rem;
+            padding: 8px 12px;
+            color: #f1f4f7;
+            display: block;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        
+        .dropdown-container a:hover {
+            background-color: #004d40;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .navbar-custom h2 {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .space-logo {
+            width: 250px; /* Adjust this value as needed */
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .task-message {
+            display: none;
+            text-align: center;
+        }
+
+        .task-message.active {
+            display: block;
+        }
+
+     /* Footer Styling */
+        footer {
+            background-color: #1d3557;
+            color: white;
+            padding: 30px 10px;
+            width: 100%;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            gap: 30px;
+            text-align: left;
+        }
+
+        .contact-info h3 {
+            font-size: 20px; /* Increased font size */
+            font-weight: bold;
+            color: #f1faee;
+            margin-bottom: 10px;
+            white-space: nowrap; /* Prevents wrapping */
+            padding-bottom: 5px;
+        }
+
+        .contact-info p {
+            font-size: 20px; /* Increased font size */
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: #f1c40f;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #f39c12;
+        }
+
+        .footer-bottom {
+            font-size: 16px;
+            color: #a8dadc;
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-custom">
+        <div class="navbar-content">
+            <div class="home-container">
+                <a href="{{ url_for('welcome') }}" class="home-link">
+                    <i class="fas fa-home"></i> <!-- Font Awesome Home Icon -->
+                </a>
+                
+            </div>
+            <div class="logout-container">
+                <a href="{{ url_for('logout') }}" class="logout-link">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <div class="content">
+        <!-- Welcome Message Section -->
+        <div id="welcomeMessage" class="task-message {% if not active_task %}active{% endif %}">
+            <div class="welcome-box">
+                <a href="/" class="logo" aria-label="Kennesaw State University Home" onclick="event.preventDefault();">
+                    <img src="https://webstatic.kennesaw.edu/_resources/images/template/ksu_horizontal.svg" alt="KSU Logo" class="space-logo" style="width: 300px; height: auto;">
+                </a>
+                <h1 id="mainHeading">Welcome to the GTA Management System</h1>
+                <p style="opacity: 0; animation: fadeIn 2s ease forwards; animation-delay: 1.2s;">
+                    Use the dropdowns below to navigate and manage your GTA-related activities. Click on the options to view the respective sections. Seamlessly manage your recruitment process from start to finish.
+                </p>
+                <div class="dropdowns-container">
+                    <div class="move-here-box">
+                        <img src="https://developer.android.com/static/images/cluster-illustrations/quality-guidelines.svg" alt="Quality Guidelines Icon">
+                        <h3 id="gtaRequests" class="dropdown-toggle">GTA Requests</h3>
+                        <div class="dropdown-container">
+                            <a href="{{ url_for('import_course_data') }}">Import Course Data</a>
+                            <a href="{{ url_for('view_requests') }}">View Requests</a>
+                        </div>
+                    </div>
+                    <div class="move-here-box">
+                        <img src="https://developer.android.com/static/images/spot-icons/tools-update.svg" alt="Tools Update Icon">
+                        <h3 id="gtaHiring" class="dropdown-toggle">GTA Hiring Management</h3>
+                        <div class="dropdown-container">
+                            <a href="{{ url_for('upload_approval_sheet') }}">Upload Approval Sheet</a>
+                            <a href="{{ url_for('editable_approval_sheet') }}">View/Edit Approval Sheet</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<footer>
+    <div class="footer-container">
+        <div class="contact-info">
+            <h3>Contact Info:</h3>
+            <p><strong>Kennesaw Campus</strong><br>1000 Chastain Road, Kennesaw, GA 30144</p>
+            <p><strong>Marietta Campus</strong><br>1100 South Marietta Pkwy, Marietta, GA 30060</p>
+            <p><strong>Phone</strong><br>470-KSU-INFO (470-578-4636)</p>
+        </div>
+        <div class="social-icons">
+            <a href=""><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+            <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+            <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+            <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Kennesaw State University. All Rights Reserved.</p>
+    </div>
+</footer>
+    <script>
+        document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+                const container = this.nextElementSibling;
+                container.style.display = container.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        const taskLinks = document.querySelectorAll('.task-link');
+        taskLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const taskToShow = this.getAttribute('data-task');
+                if (taskToShow) showTaskMessage(taskToShow);
+            });
+        });
+
+        function showTaskMessage(taskId) {
+            document.querySelectorAll('.task-message').forEach(message => {
+                message.classList.remove('active');
+            });
+            const selectedTask = document.getElementById(taskId);
+            if (selectedTask) {
+                selectedTask.classList.add('active');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if active_task %}
+                showTaskMessage('{{ active_task }}');
+            {% else %}
+                showTaskMessage('welcomeMessage');
+            {% endif %}
+        });
+    </script>
+</body>
+</html>

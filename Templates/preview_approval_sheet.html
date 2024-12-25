@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Sheet Preview</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Navbar styling */
+.navbar-custom {
+    background-color: #1a202c;
+    border-bottom: 2px solid black;
+    padding: 30px 20px;
+    position: fixed; /* Changed to fixed */
+    top: 0; /* Positions it at the top */
+    width: 100%; /* Ensures it spans the full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensures it stays above other content */
+}
+.navbar-center-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Custom button styles */
+.btn-generate, .btn-back, .btn-upload {
+    font-size: 0.875rem;
+    padding: 10px 20px;
+    border-radius: 20px; /* Rounds the corners */
+}
+.btn-generate {
+    background-color: #4089d6;
+    color: white;
+    border: none;
+    margin-right: 10px;
+}
+.btn-generate:hover {
+    background-color: white;
+    color: black;
+}
+.btn-back {
+    background-color: #4089d6;
+    color: white;
+    border: none;
+}
+.btn-back:hover {
+    background-color: white;
+    color: black;
+}
+.btn-upload {
+    background-color: #4089d6;
+    color: white;
+    border: none;
+}
+.btn-upload:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Main content padding to prevent overlap with fixed navbar */
+.container {
+    display: flex;             /* Enable flexbox */
+    justify-content: center;   /* Center the table horizontally */
+    padding-top: 1000px;        /* Adjust the top padding to avoid overlap with the navbar */
+}
+/* Button container */
+.button-container {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Table styling */
+.table {
+    background-color: white;
+    text-align: center; 
+    table-layout: auto;
+    font: 1em sans-serif;
+
+}
+
+.table th, .table td {
+    padding: 15px 25px;
+    white-space: nowrap;
+
+    text-align: center; /* Ensures the content of both header and rows is centered */
+}
+/* Styling for the entire table header */
+.table thead {
+    background-color: #1dd44b; /* Dark background color for the header */
+    color: white; /* White text color */
+    font: 1.4em sans-serif;
+    font-style: oblique;
+}
+
+/* Optional: You can add padding, boldness, and center text for readability */
+.table th {
+    font-weight: bold; /* Make header text bold */
+    padding: 15px 25px; /* Padding for better spacing */
+    text-align: center; /* Center align the text */
+}
+.badge-tier1, .badge-tier2, .badge-tier3, .badge-ai, .badge-si, .badge-no-gta, .badge-no-si, .badge-si-ai, .badge-default {
+    display: inline-block; /* Ensures that the badge is treated as an inline block */
+    padding: 5px 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 0.875rem;
+    text-align: center; /* Centers the text inside the badge */
+}
+
+
+  /* Badge styles */
+  .badge-tier1 { background-color: #4CAF50; color: white; }
+  .badge-tier2 { background-color: #FF9800; color: white; }
+  .badge-tier3 { background-color: #9C27B0; color: white; }
+  .badge-ai { background-color: #2196F3; color: white; }
+  .badge-si { background-color: #E91E63; color: white; }
+  .badge-no-gta { background-color: #dd1313; color: white; }
+  .badge-no-si { background-color: #dd1313; color: white; }
+  .badge-si-ai { background-color: #8643de; color: rgb(249, 246, 246); }
+  .badge-default { background-color: #777; color: white; }
+
+    </style>
+</head>
+<body style="background-color: #f5f7f1;">
+    <!-- Navbar with title and buttons -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <span class="navbar-center-title">UPLOADED APPROVAL SHEET PREVIEW</span>
+        <div class="button-container">
+            <a href="{{ url_for('upload_approval_sheet') }}" class="btn btn-upload">Upload Approval File</a>
+            <a href="{{ url_for('welcome') }}" class="btn btn-back">HOME</a>
+
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5">
+
+        {% if records %}
+        <table class="table table-striped table-bordered mt-3">
+            <thead>
+                <tr>
+                    {% for column in headers %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                    <tr>
+                        {% for key in headers %}
+                            <td>
+                                {% if key == 'GTA Assignment' %}
+                                    {% set assignment = row[key] | lower %}
+                                    {% if assignment == 'tier 1 gta' %}
+                                        <span class="badge badge-tier1">{{ row[key] }}</span>
+                                    {% elif assignment == 'tier 2 gta' %}
+                                        <span class="badge badge-tier2">{{ row[key] }}</span>
+                                    {% elif assignment == 'tier 3 gta' %}
+                                        <span class="badge badge-tier3">{{ row[key] }}</span>
+                                    {% elif assignment == 'ai' %}
+                                        <span class="badge badge-ai">{{ row[key] }}</span>
+                                    {% elif assignment == 'si' %}
+                                        <span class="badge badge-si">{{ row[key] }}</span>
+                                    {% elif assignment == 'no gta' %}
+                                        <span class="badge badge-no-gta">{{ row[key] }}</span>
+                                    {% elif assignment == 'no si' %}
+                                        <span class="badge badge-no-si">{{ row[key] }}</span>
+                                    {% elif assignment == 'si/ai' %}
+                                        <span class="badge badge-si-ai">{{ row[key] }}</span>
+                                    {% else %}
+                                        <span class="badge badge-default">{{ row[key] }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    {{ row[key] }}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No records to display. Please upload a file first.</p>
+        <a href="{{ url_for('upload_approval_sheet') }}" class="btn btn-primary">Upload Approval Sheet</a>
+        {% endif %}
+        

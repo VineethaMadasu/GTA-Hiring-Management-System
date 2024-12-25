@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Approval Sheet</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- FontAwesome for icons -->
+    <style>
+        /* Body Styling */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Navbar Styling */
+        .navbar-custom {
+            position: fixed; /* Fixes the navbar at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #1a202c; /* Unified background color for navbar */
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative; /* Allows the title to be absolutely positioned */
+        }
+
+        .navbar-center-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            white-space: nowrap; /* Prevents wrapping */
+        }
+
+        .navbar-buttons {
+            display: flex;
+            gap: 10px; /* Adds space between buttons */
+            justify-content: flex-end; /* Aligns buttons to the right */
+            flex: 1;
+        }
+
+        /* Unified Button Styling */
+        .btn-custom {
+            background-color: #1a202c; /* Same as navbar background */
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            text-decoration: none; /* Removes underline */
+            text-align: center;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px; /* Adds curvature to the buttons */
+
+        }
+
+        .btn-custom:hover {
+            background-color: white; /* Slightly lighter shade for hover */
+            color: black;
+        }
+
+
+
+
+        .btn-add-column {
+            background-color: #1a202c; /* Same as navbar background */
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            text-decoration: none; /* Removes underline */
+            text-align: center;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px; /* Adds curvature to the buttons */
+
+        }
+
+        .btn-add-column:hover {
+            background-color: white; /* Slightly lighter shade for hover */
+            color: black;
+        }
+
+        /* Table Styling */
+        .table-container {
+            display: flex;
+            justify-content: center;
+            margin: 0 auto;
+            max-width: 90%;
+            padding-top: 100px;
+        }
+
+        .table {
+            width: 100%; /* Ensures the table fills the container */
+            table-layout: auto;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            border-collapse: collapse; /* Removes space between table borders */
+        }
+
+        .table th, .table td {
+            padding: 15px; /* Adds padding inside cells */
+            text-align: center; /* Center-align text */
+            border: 1px solid #ddd; /* Adds light border around cells */
+        }
+
+        .table thead th {
+            background-color: #81c784; /* Dark color for headers */
+            color: white; /* White text for contrast */
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f5f5f5; /* Light gray for alternate rows */
+        }
+
+        .table tbody tr:hover {
+            background-color: #e0e0e0; /* Highlight on hover */
+        
+        }
+
+
+
+        .btn-delete-column {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .student-display {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            background-color: #fff;
+            min-width: 250px;
+        }
+
+        .student-entry {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .delete-student {
+            color: red;
+            cursor: pointer;
+            position: absolute;
+            right: 8px;
+            top: 8px;
+        }
+
+        .btn-assign-student {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            border: none;
+            margin-top: 5px;
+        }
+
+        .modal-header {
+            background-color: #1a202c;
+            color: white;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .badge-tier1 { background-color: #4CAF50; }
+        .badge-tier2 { background-color: #FF9800; }
+        .badge-tier3 { background-color: #9C27B0; }
+        .badge-ai { background-color: #2196F3; }
+        .badge-si { background-color: #E91E63; }
+        .badge-no-gta { background-color: #dd1313; }
+        .badge-no-si { background-color: #dd1313; }
+        .badge-si-ai { background-color: #8643de; }
+        .badge-default { background-color: #777; }
+
+
+
+
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="navbar-buttons">
+            <button type="submit" class="btn-custom" onclick="saveTable()">Save</button>
+            <a href="{{ url_for('welcome') }}" class="btn-custom">Home</a>
+            <button type="button" class="btn btn-add-column" onclick="initializeStudentAssignment()">
+                <i class="fas fa-user-plus"></i> : Initialize Student Assignment</button>
+        </div>
+        <span class="navbar-center-title">EDITABLE APPROVAL SHEET</span>
+    </nav>
+    <div class="table-container">
+        <form method="POST" id="approvalForm">
+            <table id="editableTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>CRN</th>
+                        <th>Course Num/Sec</th>
+                        <th>Instructor</th>
+                        <th>Current Enrollment</th>
+                        <th>Course Type</th>
+                        <th>GTA Assignment</th>
+                        <th>Timestamp</th>
+                        <th>Students</th>
+                        {% for col in added_columns %}
+                        <th>
+                            {{ col }}
+                            <button type="button" class="btn btn-sm btn-delete-column" onclick="deleteColumn('{{ col }}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in records %}
+                    <tr data-student-assignments='{{ row.get("student_assignments", [])|tojson|safe }}'>
+                        <td>
+                            {{ row.get('CRN', '') }}
+                            <input type="hidden" name="CRN[]" value="{{ row.get('CRN', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('Course Num/Sec', '') }}
+                            <input type="hidden" name="Course_Num_Sec[]" value="{{ row.get('Course Num/Sec', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('Instructor', '') }}
+                            <input type="hidden" name="Instructor[]" value="{{ row.get('Instructor', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('Current Enrollment', '') }}
+                            <input type="hidden" name="Current_Enrollment[]" value="{{ row.get('Current Enrollment', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('Course Type', '') }}
+                            <input type="hidden" name="Course_Type[]" value="{{ row.get('Course Type', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('GTA Assignment', '') }}
+                            <input type="hidden" name="GTA_Assignment[]" value="{{ row.get('GTA Assignment', '') }}">
+                        </td>
+                        <td>
+                            {{ row.get('Timestamp', '') }}
+                            <input type="hidden" name="Timestamp[]" value="{{ row.get('Timestamp', '') }}">
+                        </td>
+                        <input type="hidden" name="_id[]" value="{{ row['_id'] }}">
+                        <td id="student-cell-{{ loop.index0 }}" class="student-assignment-cell">
+                            <div class="student-display">
+                                {% if row.get('student_assignments') %}
+                                    {% set outer_loop = loop %}
+                                    {% for student in row.get('student_assignments') %}
+                                    <div class="student-entry" id="student-entry-{{ outer_loop.index0 }}-{{ loop.index0 }}">
+                                        <i class="fas fa-times delete-student" 
+                                           onclick="removeStudent('student-entry-{{ outer_loop.index0 }}-{{ loop.index0 }}')"></i>
+                                        <strong>{{ student.name }}</strong><br>
+                                        <small>
+                                            🆔 {{ student.ksuId }}<br>
+                                            📧 {{ student.email }}<br>
+                                            📱 {{ student.contact }}
+                                        </small>
+                                        <input type="hidden" 
+                                               name="student_assignments[{{ outer_loop.index0 }}][]" 
+                                               value='{{ student|tojson|safe }}'>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn-sm btn-assign-student" 
+                                    onclick="showStudentModal('{{ loop.index0 }}')">
+                                <i class="fas fa-user-plus"></i> Assign Student
+                            </button>
+                        </td>
+                        {% for col in added_columns %}
+                        <td>
+                            <input type="text" name="{{ col }}[]" class="form-control" placeholder="Enter value" value="{{ row.get(col, '') }}">
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <!-- Student Assignment Modal -->
+    <!-- Replace your existing modal with this updated version -->
+<div class="modal fade" id="studentAssignmentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Tab navigation -->
+                <ul class="nav nav-tabs mb-3" id="studentTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="existing-tab" data-toggle="tab" href="#existing" role="tab">
+                            Select Existing Student
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="new-tab" data-toggle="tab" href="#new" role="tab">
+                            Add New Student
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab content -->
+                <div class="tab-content" id="studentTabContent">
+                    <!-- Existing Student Tab -->
+                    <div class="tab-pane fade show active" id="existing" role="tabpanel">
+                        <div class="form-group">
+                            <input type="text" class="form-control mb-3" id="studentSearch" 
+                                   placeholder="Search students...">
+                        </div>
+                        <div id="existingStudentsList" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Students will be loaded here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- New Student Tab -->
+                    <div class="tab-pane fade" id="new" role="tabpanel">
+                        <form id="studentAssignmentForm">
+                            <div class="form-group">
+                                <label for="studentName">Student Name *</label>
+                                <input type="text" class="form-control" id="studentName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="ksuId">KSU ID *</label>
+                                <input type="text" class="form-control" id="ksuId" required 
+                                       pattern="\d{9}" maxlength="9" placeholder="Enter 9-digit KSU ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="studentEmail">Student Email *</label>
+                                <input type="email" class="form-control" id="studentEmail" required
+                                       placeholder="student@kennesaw.edu">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactNumber">Contact Number *</label>
+                                <input type="tel" class="form-control" id="contactNumber" required
+                                       placeholder="XXX-XXX-XXXX">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <input type="hidden" id="currentCellId">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="assignStudentBtn">Assign Student</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Include necessary scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Include the JavaScript code from the previous response -->
+    <script>
+       let studentColumnInitialized = false;
+let existingStudents = [];
+
+// Initialize student assignment
+function initializeStudentAssignment() {
+    if (studentColumnInitialized) {
+        alert("Student assignment column has already been initialized.");
+        return;
+    }
+    
+    studentColumnInitialized = true;
+    
+    // Enable the existing buttons and displays
+    const assignButtons = document.querySelectorAll('.btn-assign-student');
+    assignButtons.forEach(button => {
+        button.disabled = false;
+    });
+    
+    const studentDisplays = document.querySelectorAll('.student-display');
+    studentDisplays.forEach(display => {
+        display.style.display = 'block';
+    });
+}
+
+// Load existing students when modal is opened
+$('#studentAssignmentModal').on('show.bs.modal', function () {
+    loadExistingStudents();
+});
+
+// Function to load existing students
+function loadExistingStudents() {
+    fetch('/get_existing_students')
+        .then(response => response.json())
+        .then(students => {
+            existingStudents = students;
+            displayFilteredStudents(students);
+        })
+        .catch(error => console.error('Error loading students:', error));
+}
+
+// Function to display students in the list
+function displayFilteredStudents(students) {
+    const listContainer = document.getElementById('existingStudentsList');
+    listContainer.innerHTML = '';
+
+    students.forEach(student => {
+        const studentCard = document.createElement('div');
+        studentCard.className = 'card mb-2 student-card';
+        studentCard.innerHTML = `
+            <div class="card-body">
+                <h5 class="card-title">${student.name}</h5>
+                <p class="card-text">
+                    🆔 ${student.ksuId}<br>
+                    📧 ${student.email}<br>
+                    📱 ${student.contact}
+                </p>
+                <button type="button" class="btn btn-primary btn-sm" 
+                        onclick='selectExistingStudent(${JSON.stringify(student)})'>
+                    Select
+                </button>
+            </div>
+        `;
+        listContainer.appendChild(studentCard);
+    });
+}
+
+// Search functionality
+document.getElementById('studentSearch').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const filteredStudents = existingStudents.filter(student => 
+        student.name.toLowerCase().includes(searchTerm) ||
+        student.ksuId.includes(searchTerm) ||
+        student.email.toLowerCase().includes(searchTerm)
+    );
+    displayFilteredStudents(filteredStudents);
+});
+
+// Function to show student modal
+function showStudentModal(rowIndex) {
+    const form = document.getElementById('studentAssignmentForm');
+    form.reset();
+    Array.from(form.elements).forEach(element => {
+        element.classList.remove('is-invalid');
+    });
+    
+    document.getElementById('currentCellId').value = rowIndex;
+    $('#studentAssignmentModal').modal('show');
+}
+
+// Function to select existing student
+function selectExistingStudent(student) {
+    const rowIndex = document.getElementById('currentCellId').value;
+    addStudentToCellWithInfo(rowIndex, student);
+    $('#studentAssignmentModal').modal('hide');
+}
+
+// Function to add student to cell
+function addStudentToCellWithInfo(rowIndex, studentInfo) {
+    const cell = document.getElementById(`student-cell-${rowIndex}`);
+    if (!cell) {
+        console.error('Cell not found:', rowIndex);
+        return;
+    }
+
+    const displayDiv = cell.querySelector('.student-display');
+    if (!displayDiv) {
+        console.error('Student display div not found in cell:', rowIndex);
+        return;
+    }
+
+    const studentCount = displayDiv.querySelectorAll('.student-entry').length;
+    const studentEntryId = `student-entry-${rowIndex}-${studentCount}`;
+
+    const studentEntry = document.createElement('div');
+    studentEntry.className = 'student-entry';
+    studentEntry.id = studentEntryId;
+    studentEntry.innerHTML = `
+        <i class="fas fa-times delete-student" onclick="removeStudent('${studentEntryId}')"></i>
+        <strong>${studentInfo.name}</strong><br>
+        <small>
+            🆔 ${studentInfo.ksuId}<br>
+            📧 ${studentInfo.email}<br>
+            📱 ${studentInfo.contact}
+        </small>
+        <input type="hidden" name="student_assignments[${rowIndex}][]" value='${JSON.stringify(studentInfo)}'>
+    `;
+
+    displayDiv.appendChild(studentEntry);
+}
+
+// Function to remove student
+function removeStudent(studentEntryId) {
+    if (confirm('Are you sure you want to remove this student?')) {
+        const studentEntry = document.getElementById(studentEntryId);
+        if (studentEntry) {
+            studentEntry.remove();
+        }
+    }
+}
+
+// Add student button click handler
+document.getElementById('assignStudentBtn').addEventListener('click', function() {
+    const activeTab = document.querySelector('#studentTabs .nav-link.active');
+    const rowIndex = document.getElementById('currentCellId').value;
+
+    if (activeTab.id === 'existing-tab') {
+        // Existing student tab is active - validation handled in selectExistingStudent
+        return;
+    } else {
+        // New student tab is active
+        const form = document.getElementById('studentAssignmentForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const email = document.getElementById('studentEmail').value.trim();
+        if (!email.endsWith('@kennesaw.edu')) {
+            alert('Please use a Kennesaw email address');
+            return;
+        }
+
+        const studentInfo = {
+            name: document.getElementById('studentName').value.trim(),
+            ksuId: document.getElementById('ksuId').value.trim(),
+            email: email,
+            contact: document.getElementById('contactNumber').value.trim(),
+        };
+
+        addStudentToCellWithInfo(rowIndex, studentInfo);
+        $('#studentAssignmentModal').modal('hide');
+        form.reset();
+    }
+});
+
+// Input formatting event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Phone number formatting
+    const phoneInput = document.getElementById('contactNumber');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function(e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : !x[3] ? `${x[1]}-${x[2]}` : `${x[1]}-${x[2]}-${x[3]}`;
+        });
+    }
+
+    // KSU ID formatting and validation
+    const ksuIdInput = document.getElementById('ksuId');
+    if (ksuIdInput) {
+        ksuIdInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '').substr(0, 9);
+        });
+
+        ksuIdInput.addEventListener('blur', function(e) {
+            if (e.target.value.length !== 9) {
+                e.target.classList.add('is-invalid');
+                alert('KSU ID must be 9 digits');
+            } else {
+                e.target.classList.remove('is-invalid');
+            }
+        });
+    }
+
+    // Email validation
+    const emailInput = document.getElementById('studentEmail');
+    if (emailInput) {
+        emailInput.addEventListener('blur', function(e) {
+            if (e.target.value && !e.target.value.endsWith('@kennesaw.edu')) {
+                e.target.classList.add('is-invalid');
+                alert('Please use a Kennesaw email address');
+            } else {
+                e.target.classList.remove('is-invalid');
+            }
+        });
+    }
+});
+
+// Save functionality
+function saveTable() {
+    // Ensure all student assignments are included in the form
+    const studentCells = document.querySelectorAll('.student-assignment-cell');
+    studentCells.forEach((cell, rowIndex) => {
+        const studentEntries = cell.querySelectorAll('.student-entry');
+        studentEntries.forEach(entry => {
+            // Ensure the hidden input has the correct name attribute
+            const hiddenInput = entry.querySelector('input[type="hidden"]');
+            if (hiddenInput) {
+                hiddenInput.name = `student_assignments[${rowIndex}][]`;
+            }
+        });
+    });
+
+    // Submit the form
+    document.getElementById("approvalForm").submit();
+}
+
+// Add styles for student cards
+const style = document.createElement('style');
+style.textContent = `
+    .student-card {
+        transition: all 0.3s ease;
+    }
+    .student-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .student-card .card-body {
+        padding: 1rem;
+    }
+    .student-card .card-title {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .student-card .card-text {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    #existingStudentsList {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 10px;
+    }
+    .student-search {
+        margin-bottom: 15px;
+        padding: 8px;
+        width: 100%;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+`;
+document.head.appendChild(style);
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

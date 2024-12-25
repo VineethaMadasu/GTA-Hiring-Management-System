@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Course Data</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-custom {
+            position: fixed; /* Fixes the navbar at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #1a292c;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .navbar-center-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .navbar-content {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+        }
+
+        .home-link {
+            background-color: #1a202c; /* Same as navbar background */
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            text-decoration: none; /* Removes underline */
+            text-align: center;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px; /* Adds curvature to the buttons */
+        }
+        .home-link:hover {
+            background-color:white; /* Darkens on hover */
+            text-decoration: none; /* Removes underline on hover */
+            color: black;
+        }
+        
+        .home-container {
+            margin-right: 5px;
+            display: flex;
+            font-weight: normal; /* Ensure text is not bold */
+            justify-content: flex-end; /* Aligns the Home link to the right */
+        }
+        
+        .logout-link {
+            background-color: #1a202c; /* Same as navbar background */
+            color: white;
+            padding: 10px 15px;
+            font-size: 1rem;
+            text-decoration: none; /* Removes underline */
+            text-align: center;
+            line-height: 1.5;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px; /* Adds curvature to the buttons */
+        }
+        
+        .logout-link:hover {
+            background-color: red;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logout-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        
+
+        .navbar-custom h2 {
+            color: white;
+            font-weight: bold;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        
+
+        .content {
+            margin: 150px auto;              /* Centers the content with space from top */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            align-items: center;
+            padding: 40px;                   /* Adjusted padding */
+            text-align: center;
+            background-color: #8acd8f;       /* White background for the box */
+            border: 2px solid #ddd;          /* Light border around the box */
+            border-radius: 15px;             /* Rounded corners */
+            width: 100%;                      /* Make the box take up full width */
+            max-width: 1000px;                /* Set a max-width for the box */
+            box-sizing: border-box;          /* Include padding and border in the element's total width */
+        }
+        
+        
+        
+        .content h1 {
+            font-size: 36px;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .content p {
+            font-size: 20px;   /* Change this value to the font size you desire */
+            line-height: 1.6;   /* Optional: Adjusts the line height for better readability */
+        }
+        
+        
+        .form-group {
+            max-width: 700px;
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 100px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            background-color: #4089d6;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2b6cb0; /* Darker blue on hover */
+        }
+
+        .custom-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 20px; /* Increase this value as needed */
+        }
+        
+        
+          /* Footer Styling */
+footer {
+    background-color: #1d3557;
+    color: white;
+    padding: 30px 10px;
+    width: 100%;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 20px;
+}
+
+.contact-info {
+    display: flex;
+    gap: 30px;
+    text-align: left;
+}
+
+.contact-info h3 {
+    font-size: 20px; /* Increased font size */
+    font-weight: bold;
+    color: #f1faee;
+    margin-bottom: 10px;
+    white-space: nowrap; /* Prevents wrapping */
+    padding-bottom: 5px;
+}
+
+.contact-info p {
+    font-size: 20px; /* Increased font size */
+    margin: 5px 0;
+    line-height: 1.6;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.social-icons a {
+    color: #f1c40f;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #f39c12;
+}
+
+.footer-bottom {
+    font-size: 16px;
+    color: #a8dadc;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-custom">
+        <span class="navbar-center-title">IMPORT COURSE DATA</span>
+        <div class="navbar-content">
+            <div class="home-container">
+                <a href="{{ url_for('welcome') }}" class="home-link">HOME</a>
+            </div>
+            <div class="logout-container">
+                <a href="{{ url_for('logout') }}" class="logout-link">LOGOUT</a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <div class="task-message import-box {% if active_task == 'import course data' %}active{% endif %}">
+            <p>Upload and manage your course-related data here.</p>
+            <p>Click the button below to upload an Excel file containing the course data.</p>
+            <form action="{{ url_for('import_course_data') }}" method="POST" enctype="multipart/form-data" class="mb-4">
+                <div class="form-group">
+                    <img src="https://developer.android.com/static/images/cluster-illustrations/quality-guidelines.svg" alt="Document Image" style="width: 250px; height: 250px;">
+                    <br>
+                    <label for="file" class="custom-label">Choose Excel File (.xlsx) or CSV File (.csv)</label> 
+                    <br>
+                    <input type="file" id="file-input" name="file" accept=".xlsx, .csv" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="contact-info">
+                <h3>Contact Info:</h3>
+                <p><strong>Kennesaw Campus</strong><br>1000 Chastain Road, Kennesaw, GA 30144</p>
+                <p><strong>Marietta Campus</strong><br>1100 South Marietta Pkwy, Marietta, GA 30060</p>
+                <p><strong>Phone</strong><br>470-KSU-INFO (470-578-4636)</p>
+            </div>
+            <div class="social-icons">
+                <a href=""><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+                <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+                <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+                <a href="#"><svg width="24" height="24" fill="currentColor"> <!-- Social icon SVG --> </svg></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Kennesaw State University. All Rights Reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
