@@ -7,7 +7,7 @@ db = client["gta_application"]  # Use your database name
 collection = db["catalog_course"]  # Use your collection name
 
 # Step 2: Read the Excel file using pandas
-excel_file = r"C:\Users\Raghu\Downloads\Milestone_3_finalcode\catalog_course.xlsx"
+excel_file = r"C:\Users\vntpv\Downloads\Milestone_3_finalcode\catalog_course.xlsx"
 df = pd.read_excel(excel_file)
 
 # Step 3: Convert the DataFrame to a dictionary
