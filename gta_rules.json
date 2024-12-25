@@ -1,0 +1,78 @@
+{
+  "rules": {
+    "below_5000": {
+      "RP_intensive": {
+        "NO_GTA": {
+          "min": 0,
+          "max": 33
+        },
+        "TIER_1_GTA": {
+          "min": 34,
+          "max": 115
+        },
+        "TIER_2_GTA": {
+          "min": 116,
+          "max": 150
+        },
+        "TIER_3_GTA": {
+          "min": 151,
+          "max": 190
+        }
+      },
+      "typical_lecture": {
+        "NO_GTA": {
+          "min": 0,
+          "max": 44
+        },
+        "HALF_TIER_1_GTA": {
+          "min": 45,
+          "max": 79
+        },
+        "TIER_1_GTA": {
+          "min": 80,
+          "max": 115
+        },
+        "TIER_2_GTA": {
+          "min": 116,
+          "max": 150
+        }
+      }
+    },
+    "5000_series": {
+      "any_course_type": {
+        "NO_GTA": {
+          "min": 0,
+          "max": 44
+        },
+        "HALF_TIER_GTA": {
+          "min": 45,
+          "max": 79
+        },
+        "TIER_1_GTA": {
+          "min": 80,
+          "max": 115
+        },
+        "TIER_2_GTA": {
+          "min": 116,
+          "max": 150
+        }
+      }
+    },
+    "6000_plus_series": {
+      "any_course_type": {
+        "NO_SI": {
+          "min": 0,
+          "max": 32
+        },
+        "SI/AI": {
+          "min": 33,
+          "max": 150
+        },
+        "NOT_APPLICABLE": {
+          "min": 151,
+          "max": 999999
+        }
+      }
+    }
+  }
+}
